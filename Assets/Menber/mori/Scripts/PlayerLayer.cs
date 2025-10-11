@@ -45,15 +45,15 @@ public class PlayerLayer : MonoBehaviour
             _playerRig.bodyType = RigidbodyType2D.Dynamic;
         }
     }
-    /*
+    
     [SerializeField, Button]
-    public async void ToGame()
+    public void ToGame()
     {
-        await this.gameObject.transform.DOMoveY(-125, 3f).SetEase(Ease.InOutQuad);
+        this.gameObject.transform.DOMoveY(-125, 3f).SetEase(Ease.InOutQuad);
         IsGameTime = true;
         ChangeParent();
     }
-    */
+    
     [SerializeField, Button]
     public void ToResult()
     {
