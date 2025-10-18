@@ -4,21 +4,48 @@ using UnityEngine;
 using NaughtyAttributes;
 using TMPro;
 using UnityEngine.SceneManagement;
+using Cysharp.Threading.Tasks;
+using System;
 
 public class CountDown : MonoBehaviour
 {
+    private static CountDown instance;
+    public static CountDown Inctance
+    {
+        get
+        {
+            if (instance == null)
+            {
+                instance = FindObjectOfType<CountDown>();
+
+                if (instance == null)
+                {
+                    var obj = new GameObject("CountDown");
+                    instance = obj.AddComponent<CountDown>();
+                }
+            }
+            return instance;
+        }
+    }
+
     [SerializeField, Label("ŠÔƒeƒLƒXƒg")]
     private TextMeshProUGUI timeText;
     [SerializeField,Label("§ŒÀŠÔ")]
     private float limitTime = 60;
     [SerializeField, Scene, Label("‘JˆÚæ‚ÌƒV[ƒ“")]
     private string fadeScene;
+    [SerializeField, Label("‘JˆÚ‚Ü‚Å~‚Ü‚éŠÔ")]
+    private float waitTime = 1f;
 
     private bool isGemeover = false;
+    public bool IsLimitTime = false;
+    public bool IsCamera = false;
 
     void Start()
     {
-        
+        isGemeover = false;
+        IsLimitTime = false;
+        IsCamera = false;
     }
 
     private async void Update()
@@ -34,10 +61,15 @@ public class CountDown : MonoBehaviour
         {
             isGemeover = true;
 
-            //0•b‚É‚È‚Á‚½‚ç~‚Ü‚é¨è¦Î~‚ç‚µ‚Ä‰æ–Ê—h‚ç‚·
+            //è¦Î~‚ç‚µ‚Ä‰æ–Ê—h‚ç‚·
+            IsLimitTime = true;
+            IsCamera = true;
+
+            //~‚Ü‚é
+            await UniTask.Delay(TimeSpan.FromSeconds(waitTime));
 
             //ƒtƒF[ƒhƒAƒEƒg¨‰æ–Ê‘JˆÚ
-            await FadeManager.Inctance.FadeOut();
+            await FadeOut.Inctance.Fadeout();
             SceneManager.LoadScene(fadeScene);
         }
     }
