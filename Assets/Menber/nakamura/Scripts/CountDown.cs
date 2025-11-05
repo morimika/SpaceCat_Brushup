@@ -6,6 +6,7 @@ using TMPro;
 using UnityEngine.SceneManagement;
 using Cysharp.Threading.Tasks;
 using System;
+using Unity.VisualScripting;
 
 public class CountDown : MonoBehaviour
 {
@@ -31,7 +32,7 @@ public class CountDown : MonoBehaviour
     [SerializeField, Label("時間テキスト")]
     private TextMeshProUGUI timeText;
     [SerializeField,Label("制限時間")]
-    private float limitTime = 60;
+    public float limitTime = 60;
     [SerializeField, Scene, Label("遷移先のシーン")]
     private string fadeScene;
     [SerializeField, Label("遷移まで止まる時間")]
@@ -40,6 +41,9 @@ public class CountDown : MonoBehaviour
     private bool isGemeover = false;
     public bool IsLimitTime = false;
     public bool IsCamera = false;
+
+    [SerializeField]
+    private GameObject player;
 
     void Start()
     {
@@ -52,6 +56,7 @@ public class CountDown : MonoBehaviour
     {
         //カウントダウン
         //残り10秒で文字が赤くなる
+        if (PlayerLayer.IsGameTime == false) return;
         limitTime -= Time.deltaTime;
         if(limitTime < 10)  timeText.color = new Color(1.0f, 0.0f, 0.0f, 1.0f);
         if(limitTime < 0)   limitTime = 0;
@@ -71,6 +76,11 @@ public class CountDown : MonoBehaviour
             //フェードアウト→画面遷移
             await FadeOut.Inctance.Fadeout();
             SceneManager.LoadScene(fadeScene);
+        }
+        if (isGemeover == true)
+        {
+            //プレイヤー停止
+            player.transform.position = player.transform.position;
         }
     }
 }

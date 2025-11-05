@@ -16,6 +16,7 @@ public class Gimmick : MonoBehaviour
     public AudioSource audioSource;
     public AudioClip accelerateSE;
 
+    private Rigidbody2D rb;
 
     // Start is called before the first frame update
     void Start()
@@ -24,6 +25,7 @@ public class Gimmick : MonoBehaviour
 
         // 現在の速度をに猫の移動速度を設定
         catCurentSpeed = speed;
+        rb= GetComponent<Rigidbody2D>();
     }
 
     // Update is called once per frame
@@ -66,18 +68,27 @@ public class Gimmick : MonoBehaviour
     // ギミックにぶつかった際に加速
     private void OnCollisionEnter2D (Collision2D coll)
     {
+
+
+    }
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
         Debug.Log("加速ギミックに当たった=3");
 
         // 衝突したタグが"SpeedBoost"なら加速する
-        if (coll.gameObject.CompareTag("AccelerateGimmick"))
+        if (collision.gameObject.CompareTag("AccelerateGimmick"))
         {
             Instantiate(_accelarationEffect, this.transform.position, Quaternion.identity);   // エフェクトを出す
             PlaySE(accelerateSE);
-            Destroy(coll.gameObject); //衝突したゲームオブジェクトを削除
+            /*
+            Destroy(collision.gameObject); //衝突したゲームオブジェクトを削除
 
             AcceleratedCat();   // 加速
+            */
+            var val = rb.velocity.y;
+            val += acceleration;
+            rb.velocity = new Vector2(rb.velocity.x, val);
         }
-
     }
 
     void PlaySE(AudioClip audioClip)
