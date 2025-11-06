@@ -42,14 +42,21 @@ public class CountDown : MonoBehaviour
     public bool IsLimitTime = false;
     public bool IsCamera = false;
 
+    private bool isTimeRed = false;
     [SerializeField]
-    private GameObject player;
+    private AudioClip _audioClip;
+    [SerializeField]
+    private AudioSource _audioSource;
+
+    [SerializeField]
+    private Rigidbody2D player;
 
     void Start()
     {
         isGemeover = false;
         IsLimitTime = false;
         IsCamera = false;
+        player= player.GetComponent<Rigidbody2D>();
     }
 
     private async void Update()
@@ -58,8 +65,17 @@ public class CountDown : MonoBehaviour
         //残り10秒で文字が赤くなる
         if (PlayerLayer.IsGameTime == false) return;
         limitTime -= Time.deltaTime;
-        if(limitTime < 10)  timeText.color = new Color(1.0f, 0.0f, 0.0f, 1.0f);
-        if(limitTime < 0)   limitTime = 0;
+        if (limitTime < 10)
+        {
+            if (!isTimeRed)
+            {
+                _audioSource.PlayOneShot(_audioClip);
+                isTimeRed = true;
+            }
+
+                timeText.color = new Color(1.0f, 0.0f, 0.0f, 1.0f);
+        }
+            if (limitTime < 0)   limitTime = 0;
         timeText.text = "残り時間：" + limitTime.ToString("F0") + "秒";
 
         if (limitTime == 0 && isGemeover == false)
@@ -80,7 +96,7 @@ public class CountDown : MonoBehaviour
         if (isGemeover == true)
         {
             //プレイヤー停止
-            player.transform.position = player.transform.position;
+            player.bodyType=RigidbodyType2D.Static;
         }
     }
 }

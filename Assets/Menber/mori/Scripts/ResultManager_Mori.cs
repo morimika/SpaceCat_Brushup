@@ -61,6 +61,15 @@ public class ResultManager_Mori : MonoBehaviour
     [SerializeField]
     private bool fuwafuwaMode = false;
 
+    [SerializeField]
+    private AudioClip _audioClip;
+    [SerializeField]
+    private AudioSource _audioSource;
+    [SerializeField]
+    private AudioClip _audioClip2;
+    [SerializeField]
+    private AudioSource _audioSource2;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -83,6 +92,7 @@ public class ResultManager_Mori : MonoBehaviour
     [SerializeField, Button]
     public void ResetTxt()
     {
+        _audioSource2.PlayOneShot(_audioClip2);
         _titleTxt.text = "";
         _veloTxt.text = "";
         _timeTxt.text = "";
@@ -104,12 +114,14 @@ public class ResultManager_Mori : MonoBehaviour
 
     public IEnumerator TextEnabled()
     {
+        _audioSource.PlayOneShot(_audioClip);
         _titleTxt.text = "飛行結果";
         TxtAnim(_titleTxt);
         yield return new WaitForSeconds(1);
         _veloTxt.text = "最高速度：" + VelocityValue.ToString("F2") + "m/s";
         TxtAnim(_veloTxt);
         yield return new WaitForSeconds(1);
+        _audioSource.PlayOneShot(_audioClip);
         _timeTxt.text = "残り時間：" + (int)CountDown.Inctance.limitTime + "s";
         TxtAnim(_timeTxt);
         /*

@@ -27,6 +27,12 @@ public class PlayerLayer : MonoBehaviour
     private GameObject timeCanvas;
 
     public static bool DoFuwa;
+
+    [SerializeField]
+    private AudioClip _audioClip;
+    [SerializeField]
+    private AudioSource _audioSource;
+
     void Start()
     {
         _playerSpriteRend =this.GetComponent<SpriteRenderer>();
@@ -57,6 +63,7 @@ public class PlayerLayer : MonoBehaviour
     [SerializeField, Button]
     public void ToGame()
     {
+        _audioSource.PlayOneShot(_audioClip);
         this.gameObject.transform.DOMoveY(_player.transform.position.y, 3f).SetEase(Ease.InOutQuad);
         Invoke(nameof(ChangeParent), 3f);
     }
