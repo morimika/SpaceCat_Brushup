@@ -17,7 +17,7 @@ public class GameoverManager : MonoBehaviour
     private TextMeshProUGUI flavorText;
     [SerializeField, Label("やりなおすボタン")]
     private GameObject returnGameButton;
-    [SerializeField, Label("やりなおすボタテキスト")]
+    [SerializeField, Label("やりなおすボタンテキスト")]
     private TextMeshProUGUI returnGameText;
 
     [SerializeField, Label("フェードシーンのパネルを入れる")]
@@ -28,6 +28,8 @@ public class GameoverManager : MonoBehaviour
     [SerializeField, Label("ボタンを押した時のSE")]
     private AudioClip buttonSE;
     private AudioSource audioSource;
+
+    private bool isFade = false;
 
     void Start()
     {
@@ -43,14 +45,15 @@ public class GameoverManager : MonoBehaviour
     async UniTask Update()
     {
         //フェードが終わったら順次に表示する
-        if (fadeScenePanel.activeSelf == false)
+        if (fadeScenePanel.activeSelf == false && isFade == false)
         {
             await UniTask.Delay(TimeSpan.FromSeconds(1));
             gameoverText.gameObject.SetActive(true);
             await UniTask.Delay(TimeSpan.FromSeconds(1));
             flavorText.gameObject.SetActive(true);
             await UniTask.Delay(TimeSpan.FromSeconds(1));
-            returnGameButton.gameObject.SetActive(true);
+            returnGameButton.SetActive(true);
+            isFade = true;
         }
     }
 
