@@ -11,6 +11,6 @@ public class StartText : MonoBehaviour
 
     private void Start()
     {
-        startButtonText.DOFade(0f, 1f).SetLoops(-1, LoopType.Yoyo);
+        startButtonText.DOFade(0f, 1f).SetLoops(-1, LoopType.Yoyo).SetEase(Ease.InOutCubic).SetDelay(1f);
     }
 }

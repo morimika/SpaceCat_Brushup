@@ -3,6 +3,7 @@ using NaughtyAttributes;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class PlayerLayer : MonoBehaviour
 {
@@ -22,12 +23,25 @@ public class PlayerLayer : MonoBehaviour
 
     public static bool IsGameTime = false;
 
+    [SerializeField]
+    private GameObject timeCanvas;
+
     public static bool DoFuwa;
+
+    [SerializeField]
+    private AudioClip _audioClip;
+    [SerializeField]
+    private AudioSource _audioSource;
+
     void Start()
     {
         _playerSpriteRend =this.GetComponent<SpriteRenderer>();
         _playerRig=_player.GetComponent<Rigidbody2D>();
         IsGameTime = false;
+        timeCanvas.SetActive(false);
+        _doFollow = false;
+        _startC.SetActive(true);
+        this.gameObject.transform.position = new Vector2(0, 0.5f);
     }
 
     private void Update()
@@ -45,26 +59,29 @@ public class PlayerLayer : MonoBehaviour
             _playerRig.bodyType = RigidbodyType2D.Dynamic;
         }
     }
-    /*
+    
     [SerializeField, Button]
-    public async void ToGame()
+    public void ToGame()
     {
-        await this.gameObject.transform.DOMoveY(-125, 3f).SetEase(Ease.InOutQuad);
-        IsGameTime = true;
-        ChangeParent();
+        _audioSource.PlayOneShot(_audioClip);
+        this.gameObject.transform.DOMoveY(_player.transform.position.y, 3f).SetEase(Ease.InOutQuad);
+        Invoke(nameof(ChangeParent), 3f);
     }
-    */
+    
     [SerializeField, Button]
     public void ToResult()
     {
         _endC.SetActive(true);
+        timeCanvas.SetActive(false);
         IsGameTime = false;
         this.gameObject.transform.DOMoveY(0, 3f).SetEase(Ease.InOutQuad);
         this.gameObject.transform.DOMoveX(0, 3f).SetEase(Ease.InOutQuad);
     }
     public void ChangeParent()
     {
+        IsGameTime = true;
         _doFollow = true;
         _startC.SetActive(false);
+        timeCanvas.SetActive(true);
     }
 }
